@@ -1,39 +1,40 @@
-#include "../../ProtocolFile/Authentication.pb.h"
+#include "../../ProtocolFile/authentication.pb.h"
+#include <string>
+#include <iostream>
 
-int main(int argc, char** argv)
+int main(int argc, char** argv) 
 {
-	Authentication::CreateAccountWeb createAccount;
+    Authentication::CreateAccountWeb createAccount;
 
-	createAccount.set_requestid(123);
-	createAccount.set_email("test@example.com");
-	createAccount.set_plaintextpassword("secretpassword");
+    // Set some values for testing
+    createAccount.set_requestid(123);
+    createAccount.set_email("test@example.com");
+    createAccount.set_plaintextpassword("secretpassword");
 
-	std::string serializedMessage;
-	if (createAccount.SerializeToString(&serializedMessage)) 
-	{
-		std::cout << "Serialized Message: " << serializedMessage << std::endl;
+    // Serialize the message to a string
+    std::string serializedMessage;
+    if (createAccount.SerializeToString(&serializedMessage)) {
+        std::cout << "Serialized Message: " << serializedMessage << std::endl;
 
-		// Deserialize the string back to a message
-		Authentication::CreateAccountWeb deserializedAccount;
-		if (deserializedAccount.ParseFromString(serializedMessage)) 
-		{
-			std::cout << "Deserialized Message:" << std::endl;
-			std::cout << "RequestId: " << deserializedAccount.requestid() << std::endl;
-			std::cout << "Email: " << deserializedAccount.email() << std::endl;
-			std::cout << "PlaintextPassword: " << deserializedAccount.plaintextpassword() << std::endl;
-		}
-		else 
-		{
-			std::cerr << "Failed to deserialize the message." << std::endl;
-			return 1;
-		}
-	}
-	else 
-	{
-		std::cerr << "Failed to serialize the message." << std::endl;
-		return 1;
-	}
+        // Deserialize the string back to a message
+        Authentication::CreateAccountWeb deserializedAccount;
+        if (deserializedAccount.ParseFromString(serializedMessage)) {
+            std::cout << "Deserialized Message:" << std::endl;
+            std::cout << "RequestId: " << deserializedAccount.requestid() << std::endl;
+            std::cout << "Email: " << deserializedAccount.email() << std::endl;
+            std::cout << "PlaintextPassword: " << deserializedAccount.plaintextpassword() << std::endl;
+        }
+        else {
+            std::cerr << "Failed to deserialize the message." << std::endl;
+            return 1;
+        }
+    }
+    else {
+        std::cerr << "Failed to serialize the message." << std::endl;
+        return 1;
+    }
 
-	return 0;
+    return 0;
 
 }
+

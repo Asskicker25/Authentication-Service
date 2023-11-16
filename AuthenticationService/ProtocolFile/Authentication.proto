@@ -2,20 +2,20 @@ syntax = "proto2";
 
 package Authentication;
 
-message CreateAccountWeb 
+message CreateAccountWeb
 {
   optional int64 requestId = 1;
   optional string email = 2;
   optional string plaintextPassword = 3;
 }
 
-message CreateAccountWebSuccess 
+message CreateAccountWebSuccess
 {
   optional int64 requestId = 1;
   optional int64 userId = 2;
 }
 
-message CreateAccountWebFailure 
+message CreateAccountWebFailure
 {
   optional int64 requestId = 1;
 
@@ -36,14 +36,14 @@ message AuthenticateWeb
   optional string plaintextPassword = 3;
 }
 
-message AuthenticateWebSuccess
+message AuthenticateWebSuccess 
 {
   optional int64 requestId = 1;
   optional int64 userId = 2;
   optional string creationDate = 3;
 }
 
-message AuthenticateWebFailure
+message AuthenticateWebFailure 
 {
   optional int64 requestId = 1;
 
