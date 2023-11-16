@@ -6,30 +6,32 @@ int main(int argc, char** argv)
 {
     Authentication::CreateAccountWeb createAccount;
 
-    // Set some values for testing
     createAccount.set_requestid(123);
     createAccount.set_email("test@example.com");
     createAccount.set_plaintextpassword("secretpassword");
 
-    // Serialize the message to a string
     std::string serializedMessage;
-    if (createAccount.SerializeToString(&serializedMessage)) {
+
+    if (createAccount.SerializeToString(&serializedMessage)) 
+    {
         std::cout << "Serialized Message: " << serializedMessage << std::endl;
 
-        // Deserialize the string back to a message
         Authentication::CreateAccountWeb deserializedAccount;
-        if (deserializedAccount.ParseFromString(serializedMessage)) {
+        if (deserializedAccount.ParseFromString(serializedMessage)) 
+        {
             std::cout << "Deserialized Message:" << std::endl;
             std::cout << "RequestId: " << deserializedAccount.requestid() << std::endl;
             std::cout << "Email: " << deserializedAccount.email() << std::endl;
             std::cout << "PlaintextPassword: " << deserializedAccount.plaintextpassword() << std::endl;
         }
-        else {
+        else 
+        {
             std::cerr << "Failed to deserialize the message." << std::endl;
             return 1;
         }
     }
-    else {
+    else 
+    {
         std::cerr << "Failed to serialize the message." << std::endl;
         return 1;
     }
