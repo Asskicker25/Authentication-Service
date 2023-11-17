@@ -124,6 +124,7 @@ void TCP_Server::InitializeAndRunServer()
 	return;
 }
 
+
 void TCP_Server::AddNewClient()
 {
 	while (true)
@@ -136,6 +137,8 @@ void TCP_Server::AddNewClient()
 			Client* newClient = new Client();
 			newClient->clientSocket = newClientSocket;
 
+			OnClientConnected(newClient);
+
 			std::thread newClientThread([newClient, this]()
 				{
 					HandleCommandRecv(newClient);
@@ -143,9 +146,6 @@ void TCP_Server::AddNewClient()
 
 			listOfClients.push_back(newClient);
 			listOfClientThreads.push_back(std::move(newClientThread));
-
-			std::cout << "Client Connected" << std::endl;
-
 		}
 	}
 
@@ -204,39 +204,38 @@ void TCP_Server::HandleCommandRecv(Client* client)
 				}
 				else
 				{
-					std::cout << "Message Parsing failed "  << std::endl;
+					std::cout << "Message Parsing failed " << std::endl;
 				}
-
 			}
-			
 		}
 	}
 }
 
 void TCP_Server::HandleSendCommand()
 {
+	int result, error;
 
+	while (true)
+	{
+		if (!listOfMessagesToSend.empty())
+		{
+			ServerToClientMessages message = listOfMessagesToSend.front();
+			listOfMessagesToSend.pop();
+
+			result = send(message.client->clientSocket, message.message.c_str(), message.message.size(), 0);
+
+			if (result == SOCKET_ERROR)
+			{
+				std::cout << "Sending message to Client failed with error : " << WSAGetLastError() << std::endl;
+			}
+		}
+	}
 }
 
-//void TCP_Server::HandleCommand(const Authentication::CommandAndData& commandData)
-//{
-//
-//	if (commandData.command() == REGISTER)
-//	{
-//		Authentication::CreateAccountWeb newAccount;
-//
-//		newAccount.ParseFromString(commandData.data());
-//
-//		std::cout << "Register : " << newAccount.email() << std::endl;
-//
-//	}
-//	else if (commandData.command() == AUTHENTICATE)
-//	{
-//		Authentication::AuthenticateWeb authenticateWeb;
-//
-//		authenticateWeb.ParseFromString(commandData.data());
-//
-//		std::cout << "Register : " << authenticateWeb.email() << std::endl;
-//	}
-//}
+void TCP_Server::SendCommand(Client* client, const Command& command, const google::protobuf::Message& message)
+{
+	std::string serializedString = SerializeWithCommandAndLengthPrefix(command, message);
+
+	listOfMessagesToSend.push(ServerToClientMessages{ client, serializedString });
+}
 

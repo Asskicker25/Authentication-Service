@@ -10,7 +10,7 @@ static enum Command
 	AUTHENTICATE = 1,
 };
 
-static std::string SerializeWithCommandAndLengthPrefix(Command command, const google::protobuf::Message& message)
+static std::string SerializeWithCommandAndLengthPrefix(const Command& command, const google::protobuf::Message& message)
 {
 	std::string serializedMessage;
 	message.SerializeToString(&serializedMessage);

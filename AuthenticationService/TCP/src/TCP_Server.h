@@ -14,6 +14,7 @@
 #include <vector>
 #include <iostream>
 #include <thread>
+#include <queue>
 
 #include "Events.h"
 #include "MessageUtilities.h"
@@ -26,6 +27,12 @@ struct Client
 	int requestId;
 	SOCKET clientSocket;
 	bool terminateThread;
+};
+
+struct ServerToClientMessages
+{
+	Client* client;
+	std::string message;
 };
 
 class TCP_Server
@@ -49,19 +56,20 @@ private:
 
 	std::vector<Client*> listOfClients;
 	std::vector <std::thread> listOfClientThreads;
-
+	std::queue<ServerToClientMessages> listOfMessagesToSend;
 
 	void AddNewClient();
 	void HandleCommandRecv(Client* client);
 	void HandleSendCommand();
-	//void HandleCommand(const Authentication::CommandAndData& commandData);
 
 public:
 	TCP_Server(const std::string& ipAddress, const std::string& port);
 	~TCP_Server();
 
 	void InitializeAndRunServer();
+	void SendCommand(Client* client, const Command& command, const google::protobuf::Message& message);
 
+	std::function<void(Client*)> OnClientConnected = nullptr;
 	std::function<void(Client*, Authentication::CommandAndData)> OnCommandReceived = nullptr;
 };
 
