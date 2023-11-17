@@ -16,6 +16,7 @@
 #include <thread>
 
 #include "Events.h"
+#include "MessageUtilities.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -53,11 +54,14 @@ private:
 	void AddNewClient();
 	void HandleCommandRecv(Client* client);
 	void HandleSendCommand();
+	//void HandleCommand(const Authentication::CommandAndData& commandData);
 
 public:
 	TCP_Server(const std::string& ipAddress, const std::string& port);
 	~TCP_Server();
 
-	void InitializeServer();
+	void InitializeAndRunServer();
+
+	std::function<void(Client*, Authentication::CommandAndData)> OnCommandReceived = nullptr;
 };
 

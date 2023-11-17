@@ -47,7 +47,7 @@ struct TableStruct_authentication_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[6]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[8]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -64,6 +64,9 @@ extern AuthenticateWebFailureDefaultTypeInternal _AuthenticateWebFailure_default
 class AuthenticateWebSuccess;
 struct AuthenticateWebSuccessDefaultTypeInternal;
 extern AuthenticateWebSuccessDefaultTypeInternal _AuthenticateWebSuccess_default_instance_;
+class CommandAndData;
+struct CommandAndDataDefaultTypeInternal;
+extern CommandAndDataDefaultTypeInternal _CommandAndData_default_instance_;
 class CreateAccountWeb;
 struct CreateAccountWebDefaultTypeInternal;
 extern CreateAccountWebDefaultTypeInternal _CreateAccountWeb_default_instance_;
@@ -73,14 +76,19 @@ extern CreateAccountWebFailureDefaultTypeInternal _CreateAccountWebFailure_defau
 class CreateAccountWebSuccess;
 struct CreateAccountWebSuccessDefaultTypeInternal;
 extern CreateAccountWebSuccessDefaultTypeInternal _CreateAccountWebSuccess_default_instance_;
+class LengthPrefix;
+struct LengthPrefixDefaultTypeInternal;
+extern LengthPrefixDefaultTypeInternal _LengthPrefix_default_instance_;
 }  // namespace Authentication
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Authentication::AuthenticateWeb* Arena::CreateMaybeMessage<::Authentication::AuthenticateWeb>(Arena*);
 template<> ::Authentication::AuthenticateWebFailure* Arena::CreateMaybeMessage<::Authentication::AuthenticateWebFailure>(Arena*);
 template<> ::Authentication::AuthenticateWebSuccess* Arena::CreateMaybeMessage<::Authentication::AuthenticateWebSuccess>(Arena*);
+template<> ::Authentication::CommandAndData* Arena::CreateMaybeMessage<::Authentication::CommandAndData>(Arena*);
 template<> ::Authentication::CreateAccountWeb* Arena::CreateMaybeMessage<::Authentication::CreateAccountWeb>(Arena*);
 template<> ::Authentication::CreateAccountWebFailure* Arena::CreateMaybeMessage<::Authentication::CreateAccountWebFailure>(Arena*);
 template<> ::Authentication::CreateAccountWebSuccess* Arena::CreateMaybeMessage<::Authentication::CreateAccountWebSuccess>(Arena*);
+template<> ::Authentication::LengthPrefix* Arena::CreateMaybeMessage<::Authentication::LengthPrefix>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Authentication {
 
@@ -132,6 +140,339 @@ inline bool AuthenticateWebFailure_Reason_Parse(
     AuthenticateWebFailure_Reason_descriptor(), name, value);
 }
 // ===================================================================
+
+class LengthPrefix final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Authentication.LengthPrefix) */ {
+ public:
+  inline LengthPrefix() : LengthPrefix(nullptr) {}
+  ~LengthPrefix() override;
+  explicit constexpr LengthPrefix(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  LengthPrefix(const LengthPrefix& from);
+  LengthPrefix(LengthPrefix&& from) noexcept
+    : LengthPrefix() {
+    *this = ::std::move(from);
+  }
+
+  inline LengthPrefix& operator=(const LengthPrefix& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline LengthPrefix& operator=(LengthPrefix&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const LengthPrefix& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const LengthPrefix* internal_default_instance() {
+    return reinterpret_cast<const LengthPrefix*>(
+               &_LengthPrefix_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    0;
+
+  friend void swap(LengthPrefix& a, LengthPrefix& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(LengthPrefix* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(LengthPrefix* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline LengthPrefix* New() const final {
+    return new LengthPrefix();
+  }
+
+  LengthPrefix* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<LengthPrefix>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const LengthPrefix& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const LengthPrefix& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(LengthPrefix* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Authentication.LengthPrefix";
+  }
+  protected:
+  explicit LengthPrefix(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageLengthFieldNumber = 1,
+  };
+  // required fixed32 messageLength = 1;
+  bool has_messagelength() const;
+  private:
+  bool _internal_has_messagelength() const;
+  public:
+  void clear_messagelength();
+  ::PROTOBUF_NAMESPACE_ID::uint32 messagelength() const;
+  void set_messagelength(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_messagelength() const;
+  void _internal_set_messagelength(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Authentication.LengthPrefix)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 messagelength_;
+  friend struct ::TableStruct_authentication_2eproto;
+};
+// -------------------------------------------------------------------
+
+class CommandAndData final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Authentication.CommandAndData) */ {
+ public:
+  inline CommandAndData() : CommandAndData(nullptr) {}
+  ~CommandAndData() override;
+  explicit constexpr CommandAndData(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  CommandAndData(const CommandAndData& from);
+  CommandAndData(CommandAndData&& from) noexcept
+    : CommandAndData() {
+    *this = ::std::move(from);
+  }
+
+  inline CommandAndData& operator=(const CommandAndData& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CommandAndData& operator=(CommandAndData&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CommandAndData& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CommandAndData* internal_default_instance() {
+    return reinterpret_cast<const CommandAndData*>(
+               &_CommandAndData_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(CommandAndData& a, CommandAndData& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CommandAndData* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CommandAndData* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline CommandAndData* New() const final {
+    return new CommandAndData();
+  }
+
+  CommandAndData* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<CommandAndData>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const CommandAndData& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const CommandAndData& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(CommandAndData* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Authentication.CommandAndData";
+  }
+  protected:
+  explicit CommandAndData(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDataFieldNumber = 2,
+    kCommandFieldNumber = 1,
+  };
+  // required bytes data = 2;
+  bool has_data() const;
+  private:
+  bool _internal_has_data() const;
+  public:
+  void clear_data();
+  const std::string& data() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_data(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_data();
+  PROTOBUF_MUST_USE_RESULT std::string* release_data();
+  void set_allocated_data(std::string* data);
+  private:
+  const std::string& _internal_data() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_data(const std::string& value);
+  std::string* _internal_mutable_data();
+  public:
+
+  // required int32 command = 1;
+  bool has_command() const;
+  private:
+  bool _internal_has_command() const;
+  public:
+  void clear_command();
+  ::PROTOBUF_NAMESPACE_ID::int32 command() const;
+  void set_command(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_command() const;
+  void _internal_set_command(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Authentication.CommandAndData)
+ private:
+  class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr data_;
+  ::PROTOBUF_NAMESPACE_ID::int32 command_;
+  friend struct ::TableStruct_authentication_2eproto;
+};
+// -------------------------------------------------------------------
 
 class CreateAccountWeb final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Authentication.CreateAccountWeb) */ {
@@ -188,7 +529,7 @@ class CreateAccountWeb final :
                &_CreateAccountWeb_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    0;
+    2;
 
   friend void swap(CreateAccountWeb& a, CreateAccountWeb& b) {
     a.Swap(&b);
@@ -383,7 +724,7 @@ class CreateAccountWebSuccess final :
                &_CreateAccountWebSuccess_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    3;
 
   friend void swap(CreateAccountWebSuccess& a, CreateAccountWebSuccess& b) {
     a.Swap(&b);
@@ -553,7 +894,7 @@ class CreateAccountWebFailure final :
                &_CreateAccountWebFailure_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    4;
 
   friend void swap(CreateAccountWebFailure& a, CreateAccountWebFailure& b) {
     a.Swap(&b);
@@ -755,7 +1096,7 @@ class AuthenticateWeb final :
                &_AuthenticateWeb_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    5;
 
   friend void swap(AuthenticateWeb& a, AuthenticateWeb& b) {
     a.Swap(&b);
@@ -950,7 +1291,7 @@ class AuthenticateWebSuccess final :
                &_AuthenticateWebSuccess_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    6;
 
   friend void swap(AuthenticateWebSuccess& a, AuthenticateWebSuccess& b) {
     a.Swap(&b);
@@ -1140,7 +1481,7 @@ class AuthenticateWebFailure final :
                &_AuthenticateWebFailure_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    7;
 
   friend void swap(AuthenticateWebFailure& a, AuthenticateWebFailure& b) {
     a.Swap(&b);
@@ -1292,6 +1633,128 @@ class AuthenticateWebFailure final :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// LengthPrefix
+
+// required fixed32 messageLength = 1;
+inline bool LengthPrefix::_internal_has_messagelength() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool LengthPrefix::has_messagelength() const {
+  return _internal_has_messagelength();
+}
+inline void LengthPrefix::clear_messagelength() {
+  messagelength_ = 0u;
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 LengthPrefix::_internal_messagelength() const {
+  return messagelength_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 LengthPrefix::messagelength() const {
+  // @@protoc_insertion_point(field_get:Authentication.LengthPrefix.messageLength)
+  return _internal_messagelength();
+}
+inline void LengthPrefix::_internal_set_messagelength(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00000001u;
+  messagelength_ = value;
+}
+inline void LengthPrefix::set_messagelength(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _internal_set_messagelength(value);
+  // @@protoc_insertion_point(field_set:Authentication.LengthPrefix.messageLength)
+}
+
+// -------------------------------------------------------------------
+
+// CommandAndData
+
+// required int32 command = 1;
+inline bool CommandAndData::_internal_has_command() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool CommandAndData::has_command() const {
+  return _internal_has_command();
+}
+inline void CommandAndData::clear_command() {
+  command_ = 0;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CommandAndData::_internal_command() const {
+  return command_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CommandAndData::command() const {
+  // @@protoc_insertion_point(field_get:Authentication.CommandAndData.command)
+  return _internal_command();
+}
+inline void CommandAndData::_internal_set_command(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000002u;
+  command_ = value;
+}
+inline void CommandAndData::set_command(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_command(value);
+  // @@protoc_insertion_point(field_set:Authentication.CommandAndData.command)
+}
+
+// required bytes data = 2;
+inline bool CommandAndData::_internal_has_data() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool CommandAndData::has_data() const {
+  return _internal_has_data();
+}
+inline void CommandAndData::clear_data() {
+  data_.ClearToEmpty();
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& CommandAndData::data() const {
+  // @@protoc_insertion_point(field_get:Authentication.CommandAndData.data)
+  return _internal_data();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void CommandAndData::set_data(ArgT0&& arg0, ArgT... args) {
+ _has_bits_[0] |= 0x00000001u;
+ data_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Authentication.CommandAndData.data)
+}
+inline std::string* CommandAndData::mutable_data() {
+  std::string* _s = _internal_mutable_data();
+  // @@protoc_insertion_point(field_mutable:Authentication.CommandAndData.data)
+  return _s;
+}
+inline const std::string& CommandAndData::_internal_data() const {
+  return data_.Get();
+}
+inline void CommandAndData::_internal_set_data(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  data_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* CommandAndData::_internal_mutable_data() {
+  _has_bits_[0] |= 0x00000001u;
+  return data_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* CommandAndData::release_data() {
+  // @@protoc_insertion_point(field_release:Authentication.CommandAndData.data)
+  if (!_internal_has_data()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return data_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void CommandAndData::set_allocated_data(std::string* data) {
+  if (data != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  data_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), data,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Authentication.CommandAndData.data)
+}
+
+// -------------------------------------------------------------------
+
 // CreateAccountWeb
 
 // optional int64 requestId = 1;
@@ -1889,6 +2352,10 @@ inline void AuthenticateWebFailure::set_reason(::Authentication::AuthenticateWeb
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

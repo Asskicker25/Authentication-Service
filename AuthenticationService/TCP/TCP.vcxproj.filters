@@ -24,6 +24,9 @@
     <ClInclude Include="src\Events.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\ProtocolFile\authentication.pb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TCP_Server.cpp">
@@ -33,6 +36,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Events.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MessageUtilities.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProtocolFile\authentication.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,7 +11,7 @@ TCP_Server::~TCP_Server()
 {
 }
 
-void TCP_Server::InitializeServer()
+void TCP_Server::InitializeAndRunServer()
 {
 
 #pragma region Winsock_Startup
@@ -156,14 +156,60 @@ void TCP_Server::AddNewClient()
 void TCP_Server::HandleCommandRecv(Client* client)
 {
 	int result, error;
-	const int bufferSize = 512;
 
 	while (!client->terminateThread)
 	{
-		char buffer[bufferSize];
+		char buffer[5];
 
-		result = recv(client->clientSocket, buffer, bufferSize, 0);
+		int32_t messageLength;
 
+		result = recv(client->clientSocket, buffer, 5, 0);
+
+		if (result == SOCKET_ERROR)
+		{
+			error = WSAGetLastError();
+
+			if (error == WSAECONNRESET || error == ECONNRESET)
+			{
+
+				printf("%s has disconnected from the room\n", "Client");
+
+				client->terminateThread = true;
+				closesocket(client->clientSocket);
+
+				listOfClients.erase(std::remove(listOfClients.begin(), listOfClients.end(), client), listOfClients.end());
+			}
+			else
+			{
+				std::cout << "Receiving message from Client failed with error : " << WSAGetLastError() << std::endl;
+			}
+		}
+		else
+		{
+			Authentication::LengthPrefix lengthPrefix;
+
+			lengthPrefix.ParseFromArray(buffer, 5);
+
+			std::string serializedMessageData(lengthPrefix.messagelength(), '\0');
+
+			result = recv(client->clientSocket, &serializedMessageData[0], lengthPrefix.messagelength(), 0);
+
+			if (result > 0)
+			{
+				Authentication::CommandAndData commnadData;
+
+				if (commnadData.ParseFromString(serializedMessageData))
+				{
+					OnCommandReceived(client, commnadData);
+				}
+				else
+				{
+					std::cout << "Message Parsing failed "  << std::endl;
+				}
+
+			}
+			
+		}
 	}
 }
 
@@ -171,3 +217,26 @@ void TCP_Server::HandleSendCommand()
 {
 
 }
+
+//void TCP_Server::HandleCommand(const Authentication::CommandAndData& commandData)
+//{
+//
+//	if (commandData.command() == REGISTER)
+//	{
+//		Authentication::CreateAccountWeb newAccount;
+//
+//		newAccount.ParseFromString(commandData.data());
+//
+//		std::cout << "Register : " << newAccount.email() << std::endl;
+//
+//	}
+//	else if (commandData.command() == AUTHENTICATE)
+//	{
+//		Authentication::AuthenticateWeb authenticateWeb;
+//
+//		authenticateWeb.ParseFromString(commandData.data());
+//
+//		std::cout << "Register : " << authenticateWeb.email() << std::endl;
+//	}
+//}
+

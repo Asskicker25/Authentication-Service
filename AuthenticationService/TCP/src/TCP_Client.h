@@ -16,6 +16,7 @@
 #include <thread>
 
 #include "Events.h"
+#include "MessageUtilities.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 class TCP_Client
@@ -29,6 +30,7 @@ private:
 	Events cleanupEvents;
 
 	bool serverConnected = false;
+	bool messageSent = false;
 
 	int result, error;
 

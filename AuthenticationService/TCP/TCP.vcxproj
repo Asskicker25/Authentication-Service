@@ -19,12 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ProtocolFile\authentication.pb.h" />
     <ClInclude Include="src\Events.h" />
     <ClInclude Include="src\TCP_Server.h" />
     <ClInclude Include="src\TCP_Client.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ProtocolFile\authentication.pb.cc" />
     <ClCompile Include="src\Events.cpp" />
+    <ClCompile Include="src\MessageUtilities.h" />
     <ClCompile Include="src\TCP_Server.cpp" />
     <ClCompile Include="src\TCP_Client.cpp" />
   </ItemGroup>
@@ -80,6 +83,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)Dependencies\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)Dependencies\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>

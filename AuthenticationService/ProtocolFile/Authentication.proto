@@ -2,6 +2,17 @@ syntax = "proto2";
 
 package Authentication;
 
+message LengthPrefix
+{
+    required fixed32 messageLength = 1;
+}
+
+message CommandAndData
+{
+    required int32 command = 1;
+    required bytes data = 2;
+}
+
 message CreateAccountWeb
 {
   optional int64 requestId = 1;

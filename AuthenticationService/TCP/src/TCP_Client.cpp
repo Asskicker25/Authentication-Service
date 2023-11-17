@@ -120,4 +120,61 @@ void TCP_Client::HandleCommandRecv()
 
 void TCP_Client::HandleSendCommand()
 {
+	int result, error;
+
+
+	while (serverConnected)
+	{
+		if (messageSent) return;
+
+		Authentication::CreateAccountWeb createAccountWeb;
+		createAccountWeb.set_requestid(0);
+		createAccountWeb.set_email("surya@gmail,com");
+		createAccountWeb.set_plaintextpassword("Password");
+
+		std::string buffer = SerializeWithCommandAndLengthPrefix(Command::AUTHENTICATE, createAccountWeb);
+
+	/*	std::string lengthString = buffer.substr(0, 5);
+		Authentication::LengthPrefix length;
+		length.ParseFromString(lengthString);
+
+		std::cout << length.messagelength() << std::endl;
+
+		std::string commandString = buffer.substr(5, length.messagelength());
+
+		Authentication::CommandAndData commandData;
+		commandData.ParseFromString(commandString);
+
+		Authentication::CreateAccountWeb newAccount;
+		newAccount.ParseFromString(commandData.data());
+
+
+		std::cout << newAccount.email() << std::endl;*/
+
+
+		result = send(serverSocket, buffer.c_str(), buffer.size(), 0);
+		messageSent = true;
+
+
+		if (result == SOCKET_ERROR)
+		{
+			error = WSAGetLastError();
+
+			if (error == WSAECONNRESET || error == ECONNRESET)
+			{
+				std::cout << "Lost Connection to Server" << std::endl;
+
+				serverConnected = false;
+				cleanupEvents.Invoke();
+			}
+			else
+			{
+				std::cout << "Sending Message to Server failed with error : " << WSAGetLastError() << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << "Message Sent to Server" << std::endl;
+		}
+	}
 }
