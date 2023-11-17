@@ -14,11 +14,19 @@
 #include <vector>
 #include <iostream>
 #include <thread>
+#include <queue>
 
 #include "Events.h"
 #include "MessageUtilities.h"
 
 #pragma comment(lib, "Ws2_32.lib")
+
+
+struct ClientToServerMessages
+{
+	std::string message;
+};
+
 class TCP_Client
 {
 private:
@@ -30,7 +38,6 @@ private:
 	Events cleanupEvents;
 
 	bool serverConnected = false;
-	bool messageSent = false;
 
 	int result, error;
 
@@ -40,14 +47,21 @@ private:
 	struct addrinfo* info = nullptr;
 	struct addrinfo hints;
 
+	std::queue<ClientToServerMessages> listOfMessagesToSend;
+
 	void HandleCommandRecv();
 	void HandleSendCommand();
 
 public:
-
-	TCP_Client(const std::string& ipAddress, const std::string& port);
+	TCP_Client();
 	~TCP_Client();
 
-	void ConnectToServer();
+	void ConnectToServer(const std::string& ipAddress, const std::string& port);
+
+	void SendCommand(const Command& command, const google::protobuf::Message& message);
+
+	std::function<void()> OnConnectedToServer = nullptr;
+	std::function<void(Authentication::CommandAndData)> OnCommandReceived = nullptr;
+
 };
 

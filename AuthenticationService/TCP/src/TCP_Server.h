@@ -63,11 +63,14 @@ private:
 	void HandleSendCommand();
 
 public:
-	TCP_Server(const std::string& ipAddress, const std::string& port);
+	TCP_Server();
 	~TCP_Server();
 
-	void InitializeAndRunServer();
+	void InitializeAndRunServer(const std::string& ipAddress, const std::string& port);
+
 	void SendCommand(Client* client, const Command& command, const google::protobuf::Message& message);
+
+	std::vector<Client*> GetAllClients();
 
 	std::function<void(Client*)> OnClientConnected = nullptr;
 	std::function<void(Client*, Authentication::CommandAndData)> OnCommandReceived = nullptr;

@@ -3,11 +3,15 @@
 #include <string>
 #include "../../ProtocolFile/authentication.pb.h"
 
-
 static enum Command
 {
 	REGISTER = 0,
-	AUTHENTICATE = 1,
+	REGISTER_SUCESS = 1,
+	REGISTER_FAIL = 2,
+
+	AUTHENTICATE = 3,
+	AUTHENTICATE_SUCESS = 4,
+	AUTHENTICATE_FAIL = 5,
 };
 
 static std::string SerializeWithCommandAndLengthPrefix(const Command& command, const google::protobuf::Message& message)

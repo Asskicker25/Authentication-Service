@@ -1,21 +1,21 @@
 #include "TCP_Client.h"
 
 
-
-TCP_Client::TCP_Client(const std::string& ipAddress, const std::string& port)
+TCP_Client::TCP_Client()
 {
-	this->ipAddress = ipAddress;
-	this->port = port;
+
 }
 
 TCP_Client::~TCP_Client()
 {
 }
 
-void TCP_Client::ConnectToServer()
+void TCP_Client::ConnectToServer(const std::string& ipAddress, const std::string& port)
 {
-
 	if (serverConnected) return;
+
+	this->ipAddress = ipAddress;
+	this->port = port;
 
 #pragma region Winsock_StartUp
 
@@ -107,15 +107,65 @@ void TCP_Client::ConnectToServer()
 
 	while (true)
 	{
-
 	}
 
 	cleanupEvents.Invoke();
 	return;
 }
 
+
 void TCP_Client::HandleCommandRecv()
 {
+	int result, error;
+
+	while (serverConnected)
+	{
+		char buffer[5];
+
+		int32_t messageLength;
+
+		result = recv(serverSocket, buffer, 5, 0);
+
+		if (result == SOCKET_ERROR)
+		{
+			error = WSAGetLastError();
+
+			if (error == WSAECONNRESET || error == ECONNRESET)
+			{
+
+				std::cout << "Disconnected from server : "<< std::endl;
+				closesocket(serverSocket);
+			}
+			else
+			{
+				std::cout << "Receiving message from Server failed with error : " << WSAGetLastError() << std::endl;
+			}
+		}
+		else
+		{
+			Authentication::LengthPrefix lengthPrefix;
+
+			lengthPrefix.ParseFromArray(buffer, 5);
+
+			std::string serializedMessageData(lengthPrefix.messagelength(), '\0');
+
+			result = recv(serverSocket, &serializedMessageData[0], lengthPrefix.messagelength(), 0);
+
+			if (result > 0)
+			{
+				Authentication::CommandAndData commnadData;
+
+				if (commnadData.ParseFromString(serializedMessageData))
+				{
+					OnCommandReceived(commnadData);
+				}
+				else
+				{
+					std::cout << "Message Parsing failed " << std::endl;
+				}
+			}
+		}
+	}
 }
 
 void TCP_Client::HandleSendCommand()
@@ -125,14 +175,27 @@ void TCP_Client::HandleSendCommand()
 
 	while (serverConnected)
 	{
-		if (messageSent) return;
+		std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
-		Authentication::CreateAccountWeb createAccountWeb;
+		if (listOfMessagesToSend.size() > 0)
+		{
+			ClientToServerMessages message = listOfMessagesToSend.front();
+			listOfMessagesToSend.pop();
+
+			result = send(serverSocket, message.message.c_str(), message.message.size(), 0);
+
+			if (result == SOCKET_ERROR)
+			{
+				std::cout << "Sending message to Server failed with error : " << WSAGetLastError() << std::endl;
+			}
+		}
+
+	/*	Authentication::CreateAccountWeb createAccountWeb;
 		createAccountWeb.set_requestid(0);
 		createAccountWeb.set_email("surya@gmail,com");
 		createAccountWeb.set_plaintextpassword("Password");
 
-		std::string buffer = SerializeWithCommandAndLengthPrefix(Command::AUTHENTICATE, createAccountWeb);
+		std::string buffer = SerializeWithCommandAndLengthPrefix(Command::AUTHENTICATE, createAccountWeb);*/
 
 	/*	std::string lengthString = buffer.substr(0, 5);
 		Authentication::LengthPrefix length;
@@ -150,31 +213,13 @@ void TCP_Client::HandleSendCommand()
 
 
 		std::cout << newAccount.email() << std::endl;*/
-
-
-		result = send(serverSocket, buffer.c_str(), buffer.size(), 0);
-		messageSent = true;
-
-
-		if (result == SOCKET_ERROR)
-		{
-			error = WSAGetLastError();
-
-			if (error == WSAECONNRESET || error == ECONNRESET)
-			{
-				std::cout << "Lost Connection to Server" << std::endl;
-
-				serverConnected = false;
-				cleanupEvents.Invoke();
-			}
-			else
-			{
-				std::cout << "Sending Message to Server failed with error : " << WSAGetLastError() << std::endl;
-			}
-		}
-		else
-		{
-			std::cout << "Message Sent to Server" << std::endl;
-		}
+		
 	}
+}
+
+void TCP_Client::SendCommand(const Command& command, const google::protobuf::Message& message)
+{
+	std::string serializedString = SerializeWithCommandAndLengthPrefix(command, message);
+
+	listOfMessagesToSend.push(ClientToServerMessages{ serializedString });
 }

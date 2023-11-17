@@ -1,18 +1,19 @@
 #include "TCP_Server.h"
 
 
-TCP_Server::TCP_Server(const std::string& ipAddress, const std::string& port)
+TCP_Server::TCP_Server()
 {
-	this->ipAddress = ipAddress;
-	this->port = port;
 }
 
 TCP_Server::~TCP_Server()
 {
 }
 
-void TCP_Server::InitializeAndRunServer()
+void TCP_Server::InitializeAndRunServer(const std::string& ipAddress, const std::string& port)
 {
+
+	this->ipAddress = ipAddress;
+	this->port = port;
 
 #pragma region Winsock_Startup
 
@@ -217,7 +218,9 @@ void TCP_Server::HandleSendCommand()
 
 	while (true)
 	{
-		if (!listOfMessagesToSend.empty())
+		std::this_thread::sleep_for(std::chrono::milliseconds(5));
+
+		if (listOfMessagesToSend.size() > 0)
 		{
 			ServerToClientMessages message = listOfMessagesToSend.front();
 			listOfMessagesToSend.pop();
@@ -237,5 +240,10 @@ void TCP_Server::SendCommand(Client* client, const Command& command, const googl
 	std::string serializedString = SerializeWithCommandAndLengthPrefix(command, message);
 
 	listOfMessagesToSend.push(ServerToClientMessages{ client, serializedString });
+}
+
+std::vector<Client*> TCP_Server::GetAllClients()
+{
+	return listOfClients;
 }
 
