@@ -85,6 +85,8 @@ void TCP_Client::ConnectToServer(const std::string& ipAddress, const std::string
 
 	std::cout << "Connected to Server Successfully"<< std::endl;
 
+	OnConnectedToServer();
+
 #pragma endregion
 
 #pragma region Threads
@@ -139,6 +141,7 @@ void TCP_Client::HandleCommandRecv()
 			else
 			{
 				std::cout << "Receiving message from Server failed with error : " << WSAGetLastError() << std::endl;
+				closesocket(serverSocket);
 			}
 		}
 		else

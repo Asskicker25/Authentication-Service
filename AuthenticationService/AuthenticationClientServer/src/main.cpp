@@ -31,6 +31,7 @@ void OnCommandRecv(Authentication::CommandAndData commandData)
 void OnConnectedToServer()
 {
 	Authentication::CreateAccountWeb createAcc;
+
 	createAcc.set_email("surya@gmail.com");
 	createAcc.set_plaintextpassword("password");
 

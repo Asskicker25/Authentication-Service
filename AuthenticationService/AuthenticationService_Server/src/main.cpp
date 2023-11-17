@@ -23,6 +23,13 @@ void OnCommandRecv(Client* client, Authentication::CommandAndData commandData)
 		newAccountWeb.ParseFromString(commandData.data());
 
 		std::cout << "Register : " << newAccountWeb.email() << std::endl;
+
+		Authentication::CreateAccountWebSuccess registerSucess;
+
+		registerSucess.set_requestid(0);
+		registerSucess.set_userid(0);
+
+		server.SendCommand(client, REGISTER_SUCESS, registerSucess);
 	}
 	else if(commandData.command() == AUTHENTICATE)
 	{
@@ -36,12 +43,5 @@ void OnCommandRecv(Client* client, Authentication::CommandAndData commandData)
 void OnClientConnected(Client* client)
 {
 	std::cout << "Client Connected " << std::endl;
-
-	Authentication::CreateAccountWebSuccess registerSucess;
-
-	registerSucess.set_requestid(0);
-	registerSucess.set_userid(0);
-
-	server.SendCommand(client, REGISTER_SUCESS, registerSucess);
 
 }
