@@ -27,7 +27,7 @@ void TCP_Client::ConnectToServer(const std::string& ipAddress, const std::string
 		return;
 	}
 
-	std::cout << "Winsock Initialized Successfully" << result << std::endl;
+	std::cout << "Client : Winsock Initialized Successfully" << result << std::endl;
 
 #pragma endregion
 
@@ -42,18 +42,18 @@ void TCP_Client::ConnectToServer(const std::string& ipAddress, const std::string
 	result = getaddrinfo(ipAddress.c_str(), port.c_str(), &hints, &info);
 	if (result != 0)
 	{
-		std::cout << "Getting Address failed with error : " << result << std::endl;
+		std::cout << "Client : Getting Address failed with error : " << result << std::endl;
 		cleanupEvents.Addfunction("WSACleanup", WSACleanup);
 		cleanupEvents.Invoke();
 
 		return;
 	}
-	std::cout << "Address fetched Successfully" << std::endl;
+	std::cout << "Client : Address fetched Successfully" << std::endl;
 
 	serverSocket = socket(info->ai_family, info->ai_socktype, info->ai_protocol);
 	if (serverSocket == INVALID_SOCKET)
 	{
-		std::cout << "Socket creation failed with error : " << WSAGetLastError() << std::endl;
+		std::cout << "Client : Socket creation failed with error : " << WSAGetLastError() << std::endl;
 		cleanupEvents.Addfunction("Free Address", [this]()
 			{
 				freeaddrinfo(info);
@@ -62,7 +62,7 @@ void TCP_Client::ConnectToServer(const std::string& ipAddress, const std::string
 		return;
 	}
 
-	std::cout << "Address fetched Successfully" << std::endl;
+	std::cout << "Client : Address fetched Successfully" << std::endl;
 
 #pragma endregion
 
@@ -71,7 +71,7 @@ void TCP_Client::ConnectToServer(const std::string& ipAddress, const std::string
 	result = connect(serverSocket, info->ai_addr, (int)info->ai_addrlen);
 	if (result == INVALID_SOCKET)
 	{
-		std::cout << "Connecting to Server failed with error : " << WSAGetLastError() << std::endl;
+		std::cout << "Client : Connecting to Server failed with error : " << WSAGetLastError() << std::endl;
 		cleanupEvents.Addfunction("Close Socket", [this]()
 			{
 				closesocket(serverSocket);
@@ -82,8 +82,6 @@ void TCP_Client::ConnectToServer(const std::string& ipAddress, const std::string
 	}
 
 	serverConnected = true;
-
-	std::cout << "Connected to Server Successfully"<< std::endl;
 
 	OnConnectedToServer();
 
@@ -135,12 +133,12 @@ void TCP_Client::HandleCommandRecv()
 			if (error == WSAECONNRESET || error == ECONNRESET)
 			{
 
-				std::cout << "Disconnected from server : "<< std::endl;
+				std::cout << "Client : Disconnected from server : "<< std::endl;
 				closesocket(serverSocket);
 			}
 			else
 			{
-				std::cout << "Receiving message from Server failed with error : " << WSAGetLastError() << std::endl;
+				std::cout << "Client : Receiving message from Server failed with error : " << WSAGetLastError() << std::endl;
 				closesocket(serverSocket);
 			}
 		}
@@ -164,7 +162,7 @@ void TCP_Client::HandleCommandRecv()
 				}
 				else
 				{
-					std::cout << "Message Parsing failed " << std::endl;
+					std::cout << "Client :Message Parsing failed " << std::endl;
 				}
 			}
 		}
@@ -189,7 +187,7 @@ void TCP_Client::HandleSendCommand()
 
 			if (result == SOCKET_ERROR)
 			{
-				std::cout << "Sending message to Server failed with error : " << WSAGetLastError() << std::endl;
+				std::cout << "Client : Sending message to Server failed with error : " << WSAGetLastError() << std::endl;
 			}
 		}
 

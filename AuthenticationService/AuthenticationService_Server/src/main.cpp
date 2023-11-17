@@ -11,6 +11,10 @@ SQL_WebAuth sqlWebAuth;
 
 int main(int argc, char** argv)
 {
+
+	std::cout << "Authetication Service Server" << std::endl << std::endl;
+	std::cout << "*********************************" << std::endl << std::endl;
+
 	sqlWebAuth.AssignSQLDatabase(&sqlHandler);
 
 	sqlHandler.ConnectToDatabase("127.0.0.1:3306", "root", "password", "gdp");
@@ -18,7 +22,7 @@ int main(int argc, char** argv)
 	sqlHandler.AddPreparedStatement(StatementType::CREATEACCOUNT,
 		"INSERT INTO web_auth ( email , salt , hashed_password, userId) VALUES(?, ?, ?, ?) ");
 
-	sqlWebAuth.AddAccount("sp@.com", "pwd");
+	//sqlWebAuth.AddAccount("sp@.com", "pwd");
 
 	server.OnClientConnected = OnClientConnected;
 	server.OnCommandReceived = OnCommandRecv;
@@ -30,7 +34,7 @@ int main(int argc, char** argv)
 
 void OnCommandRecv(Client* client, Authentication::CommandAndData commandData)
 {
-	if (commandData.command() == REGISTER)
+	/*if (commandData.command() == REGISTER)
 	{
 		Authentication::CreateAccountWeb newAccountWeb;
 		newAccountWeb.ParseFromString(commandData.data());
@@ -50,11 +54,10 @@ void OnCommandRecv(Client* client, Authentication::CommandAndData commandData)
 		authAccountWeb.ParseFromString(commandData.data());
 		std::cout << "Authenticate : " << authAccountWeb.email() << std::endl;
 
-	}
+	}*/
 }
 
 void OnClientConnected(Client* client)
 {
-	std::cout << "Client Connected " << std::endl;
-
+	std::cout << "Client : Client Server Connected " << std::endl;
 }

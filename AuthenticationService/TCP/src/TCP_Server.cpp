@@ -21,7 +21,7 @@ void TCP_Server::InitializeAndRunServer(const std::string& ipAddress, const std:
 
 	if (result != 0)
 	{
-		std::cout << "Winsock initialization failed with error : " << result << std::endl;
+		std::cout << " Server : Winsock initialization failed with error : " << result << std::endl;
 
 		system("Pause");
 
@@ -44,7 +44,7 @@ void TCP_Server::InitializeAndRunServer(const std::string& ipAddress, const std:
 
 	if (result != 0)
 	{
-		std::cout << "Getting Address failed with error : " << result << std::endl;
+		std::cout << "Server : Getting Address failed with error : " << result << std::endl;
 		system("Pause");
 		cleanupEvents.Addfunction("WSACleanup", WSACleanup);
 		cleanupEvents.Invoke();
@@ -54,7 +54,7 @@ void TCP_Server::InitializeAndRunServer(const std::string& ipAddress, const std:
 	listenSocket = socket(info->ai_family, info->ai_socktype, info->ai_protocol);
 	if (listenSocket == INVALID_SOCKET)
 	{
-		std::cout << "Socket creation failed with error : " << WSAGetLastError() << std::endl;
+		std::cout << "Server : Socket creation failed with error : " << WSAGetLastError() << std::endl;
 		cleanupEvents.Addfunction("Free Address", [this]()
 			{
 				freeaddrinfo(info);
@@ -64,7 +64,7 @@ void TCP_Server::InitializeAndRunServer(const std::string& ipAddress, const std:
 		return;
 	}
 
-	std::cout << "Socket created Successfully" << std::endl;
+	std::cout << "Server : Socket created Successfully" << std::endl;
 
 #pragma endregion
 
@@ -74,7 +74,7 @@ void TCP_Server::InitializeAndRunServer(const std::string& ipAddress, const std:
 
 	if (result == SOCKET_ERROR)
 	{
-		std::cout << "Binding socked failed with error : " << WSAGetLastError() << std::endl;
+		std::cout << "Server : Binding socked failed with error : " << WSAGetLastError() << std::endl;
 		cleanupEvents.Addfunction("Close Socket", [this]()
 			{
 				closesocket(listenSocket);
@@ -83,18 +83,18 @@ void TCP_Server::InitializeAndRunServer(const std::string& ipAddress, const std:
 		return;
 	}
 
-	std::cout << "Binding socket successful " << std::endl;
+	std::cout << "Server : Binding socket successful " << std::endl;
 
 
 	result = listen(listenSocket, SOMAXCONN);
 	if (result == SOCKET_ERROR)
 	{
-		std::cout << "Listening socked failed with error : " << WSAGetLastError() << std::endl;
+		std::cout << "Server : Listening socked failed with error : " << WSAGetLastError() << std::endl;
 		cleanupEvents.Invoke();
 		return;
 	}
 
-	std::cout << "Listening socket successful " << std::endl;
+	std::cout << "Server : Listening socket successful " << std::endl;
 
 #pragma endregion
 
@@ -150,7 +150,7 @@ void TCP_Server::AddNewClient()
 		}
 	}
 
-	std::cout << "Thread Closed" << std::endl;
+	std::cout << "Server : Thread Closed" << std::endl;
 
 }
 
@@ -173,7 +173,7 @@ void TCP_Server::HandleCommandRecv(Client* client)
 			if (error == WSAECONNRESET || error == ECONNRESET)
 			{
 
-				printf("%s has disconnected from the room\n", "Client");
+				printf("Server :  %s has disconnected from the room\n", "Client");
 
 				client->terminateThread = true;
 				closesocket(client->clientSocket);
@@ -182,7 +182,7 @@ void TCP_Server::HandleCommandRecv(Client* client)
 			}
 			else
 			{
-				std::cout << "Receiving message from Client failed with error : " << WSAGetLastError() << std::endl;
+				std::cout << "Server : Receiving message from Client failed with error : " << WSAGetLastError() << std::endl;
 			}
 		}
 		else
@@ -205,7 +205,7 @@ void TCP_Server::HandleCommandRecv(Client* client)
 				}
 				else
 				{
-					std::cout << "Message Parsing failed " << std::endl;
+					std::cout << "Server : Message Parsing failed " << std::endl;
 				}
 			}
 		}
@@ -229,7 +229,7 @@ void TCP_Server::HandleSendCommand()
 
 			if (result == SOCKET_ERROR)
 			{
-				std::cout << "Sending message to Client failed with error : " << WSAGetLastError() << std::endl;
+				std::cout << "Server : Sending message to Client failed with error : " << WSAGetLastError() << std::endl;
 			}
 		}
 	}
