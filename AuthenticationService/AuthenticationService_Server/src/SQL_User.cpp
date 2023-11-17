@@ -43,15 +43,25 @@ int SQL_User::AddNewUser(int& userID)
 
 }
 
-int SQL_User::UpdateLastLogin(const int& userID)
+int SQL_User::UpdateLastLogin(const int& userID, std::string& creationDate)
 {
 	sql::PreparedStatement* stmt = sqlHandler->GetStatement(StatementType::UPDATE_LAST_LOGIN);
+	sql::PreparedStatement* stmt2 = sqlHandler->GetStatement(StatementType::GET_CREATION_DATE);
+
 	stmt->setInt(1, userID);
+	stmt2->setInt(1, userID);
 
 	try
 	{
 		stmt->execute();
 
+		sql::ResultSet* result = stmt2->executeQuery();
+
+
+		if (result->next())
+		{
+			creationDate = result->getString("creation_date");
+		}
 		std::cout << "Updated Last Login Successfully " << std::endl;
 
 		return 1;

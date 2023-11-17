@@ -74,6 +74,7 @@ void OnClientCommandRecv(Authentication::CommandAndData commandData)
 		authSucess.ParseFromString(commandData.data());
 
 		std::cout << "Authentication Success" << std::endl;
+		std::cout << "Account Created On : " <<authSucess.creationdate() << std::endl;
 
 		waitingForResponse = false;
 

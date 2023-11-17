@@ -44,6 +44,10 @@ int main(int argc, char** argv)
 	sqlHandler.AddPreparedStatement(StatementType::UPDATE_LAST_LOGIN,
 		"UPDATE user SET last_login = NOW() WHERE id = ?");
 
+	sqlHandler.AddPreparedStatement(StatementType::GET_CREATION_DATE,
+		"SELECT creation_date FROM user WHERE id = ?");
+
+
 	server.OnClientConnected = OnClientConnected;
 	server.OnCommandReceived = OnCommandRecv;
 
@@ -123,17 +127,19 @@ void OnCommandRecv(Client* client, Authentication::CommandAndData commandData)
 		authAccountWeb.ParseFromString(commandData.data());
 		
 		int userID;
+		std::string creationDate;
 
 		result = sqlWebAuth.AuthenticateAccount(authAccountWeb.email().c_str(), authAccountWeb.plaintextpassword().c_str(), userID);
 
 		if (result == 1)
 		{
-			sqlUser.UpdateLastLogin(userID);
+			sqlUser.UpdateLastLogin(userID, creationDate);
 
 			Authentication::AuthenticateWebSuccess authSuccess;
 
 			authSuccess.set_requestid(authAccountWeb.requestid());
 			authSuccess.set_userid(userID);
+			authSuccess.set_creationdate(creationDate);
 
 			server.SendCommand(client, AUTHENTICATE_SUCESS, authSuccess);
 		}

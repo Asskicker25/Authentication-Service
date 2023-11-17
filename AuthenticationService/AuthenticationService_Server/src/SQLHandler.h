@@ -9,7 +9,8 @@ enum class StatementType
 	CREATE_USER = 2,
 	UPDATE_WEB_AUTH_ID = 3,
 	GET_LAST_INSERT = 4,
-	UPDATE_LAST_LOGIN = 5
+	UPDATE_LAST_LOGIN = 5,
+	GET_CREATION_DATE = 6,
 };
 
 enum class ResultSetStatement

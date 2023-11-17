@@ -17,7 +17,5 @@ std::string SaltGenerator::GenerateSalt()
         salt += charset[rand() % (sizeof(charset) - 1)];
     }
 
-    std::cout<<"Salt : " << salt << std::endl;
-
     return salt;
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 class SQLHandler;
 
 class SQL_User
@@ -11,7 +13,7 @@ public:
 	void AssignSQLDatabase(SQLHandler* sqlHandler);
 
 	int AddNewUser(int& userID);
-	int UpdateLastLogin(const int& userID);
+	int UpdateLastLogin(const int& userID, std::string& creationDate);
 
 private:
 	SQLHandler* sqlHandler = nullptr;
