@@ -1,12 +1,25 @@
 #include <TCP_Server.h>
+#include "SQLHandler.h".
+#include "SQL_WebAuth.h"
 
 void OnCommandRecv(Client* client, Authentication::CommandAndData commandData);
 void OnClientConnected(Client* client);
 
 TCP_Server server;
+SQLHandler sqlHandler;
+SQL_WebAuth sqlWebAuth;
 
 int main(int argc, char** argv)
 {
+	sqlWebAuth.AssignSQLDatabase(&sqlHandler);
+
+	sqlHandler.ConnectToDatabase("127.0.0.1:3306", "root", "password", "gdp");
+
+	sqlHandler.AddPreparedStatement(StatementType::CREATEACCOUNT,
+		"INSERT INTO web_auth ( email , salt , hashed_password, userId) VALUES(?, ?, ?, ?) ");
+
+	sqlWebAuth.AddAccount("sp@.com", "pwd");
+
 	server.OnClientConnected = OnClientConnected;
 	server.OnCommandReceived = OnCommandRecv;
 
