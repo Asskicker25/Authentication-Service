@@ -34,19 +34,49 @@ int main(int argc, char** argv)
 
 void OnCommandRecv(Client* client, Authentication::CommandAndData commandData)
 {
-	/*if (commandData.command() == REGISTER)
+	int result;
+
+	if (commandData.command() == REGISTER)
 	{
-		Authentication::CreateAccountWeb newAccountWeb;
-		newAccountWeb.ParseFromString(commandData.data());
+		Authentication::CreateAccountWeb registerAcc;
+		registerAcc.ParseFromString(commandData.data());
 
-		std::cout << "Register : " << newAccountWeb.email() << std::endl;
 
-		Authentication::CreateAccountWebSuccess registerSucess;
+		// 1 = Success
+		// 0 = Email exists
+		// -1 = Exception not handled
+		result = sqlWebAuth.AddAccount(registerAcc.email().c_str(), registerAcc.plaintextpassword().c_str());
 
-		registerSucess.set_requestid(0);
-		registerSucess.set_userid(0);
+		if (result == 1)
+		{
+			Authentication::CreateAccountWebSuccess registerSucess;
 
-		server.SendCommand(client, REGISTER_SUCESS, registerSucess);
+			registerSucess.set_requestid(registerAcc.requestid());
+			registerSucess.set_userid(0);
+
+			server.SendCommand(client, REGISTER_SUCESS, registerSucess);
+		}
+		else 
+		{
+			Authentication::CreateAccountWebFailure registerFail;
+
+			registerFail.set_requestid(registerAcc.requestid());
+
+			if (result == 0)
+			{
+				registerFail.set_reason(
+					Authentication::CreateAccountWebFailure::Reason::CreateAccountWebFailure_Reason_ACCOUNT_ALREADY_EXISTS);
+
+			}
+			else if (result == -1)
+			{
+				registerFail.set_reason(
+					Authentication::CreateAccountWebFailure::Reason::CreateAccountWebFailure_Reason_INTERNAL_SERVER_ERROR);
+			}
+
+			server.SendCommand(client, REGISTER_FAIL, registerFail);
+		}
+		
 	}
 	else if(commandData.command() == AUTHENTICATE)
 	{
@@ -54,7 +84,7 @@ void OnCommandRecv(Client* client, Authentication::CommandAndData commandData)
 		authAccountWeb.ParseFromString(commandData.data());
 		std::cout << "Authenticate : " << authAccountWeb.email() << std::endl;
 
-	}*/
+	}
 }
 
 void OnClientConnected(Client* client)

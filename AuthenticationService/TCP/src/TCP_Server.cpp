@@ -247,3 +247,14 @@ std::vector<Client*> TCP_Server::GetAllClients()
 	return listOfClients;
 }
 
+Client* TCP_Server::GetClientWithRequestID(int requestID)
+{
+	for (Client* client : listOfClients)
+	{
+		if (client->requestId == requestID)
+			return client;
+	}
+
+	return nullptr;
+}
+

@@ -9,7 +9,7 @@ public:
 	~SQL_WebAuth();
 
 	void AssignSQLDatabase(SQLHandler* sqlHandler);
-	void AddAccount(const char* email, const char* password);
+	int AddAccount(const char* email, const char* password);
 
 private:
 	SQLHandler* sqlHandler;

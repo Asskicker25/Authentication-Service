@@ -14,7 +14,7 @@ void SQL_WebAuth::AssignSQLDatabase(SQLHandler* sqlHandler)
 	this->sqlHandler = sqlHandler;
 }
 
-void SQL_WebAuth::AddAccount(const char* email, const char* password)
+int SQL_WebAuth::AddAccount(const char* email, const char* password)
 {
 	sql::PreparedStatement* stmt = sqlHandler->GetStatement(StatementType::CREATEACCOUNT);
 	stmt->setString(1, email);
@@ -27,17 +27,24 @@ void SQL_WebAuth::AddAccount(const char* email, const char* password)
 		stmt->execute();
 
 		std::cout << "Account added successfully!" << std::endl;
+
+		return 1;
 	}
 	catch (sql::SQLException& e) 
 	{
 		if (e.getErrorCode() == 1062) 
 		{
 			std::cout << "Error: Email address already exists." << std::endl;
+			
+			return 0;
 		}
 		else
 		{
 			std::cout << "SQL Error: " << e.what() << std::endl;
+			return -1;
 		}
+
+		return -1;
 	}
 
 }

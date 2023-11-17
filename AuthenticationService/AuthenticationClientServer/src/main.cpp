@@ -2,7 +2,7 @@
 #include <TCP_Client.h>
 #include <TCP_Server.h>
 
-TCP_Client client;
+TCP_Client authClient;
 TCP_Server server;
 
 void OnClientCommandRecv(Authentication::CommandAndData commandData);
@@ -11,13 +11,15 @@ void OnClientConnectedToServer();
 void OnServerCommandRecv(Client* client, Authentication::CommandAndData commandData);
 void OnServerClientConnected(Client* client);
 
+int clientRequestId = 0;
+
 int main(int argc, char** argv)
 {
 	std::cout << "Client Server" << std::endl << std::endl;
 	std::cout << "*********************************" << std::endl << std::endl;
 
-	client.OnCommandReceived = OnClientCommandRecv;
-	client.OnConnectedToServer = OnClientConnectedToServer;
+	authClient.OnCommandReceived = OnClientCommandRecv;
+	authClient.OnConnectedToServer = OnClientConnectedToServer;
 
 	server.OnCommandReceived = OnServerCommandRecv;
 	server.OnClientConnected = OnServerClientConnected;
@@ -25,7 +27,7 @@ int main(int argc, char** argv)
 
 	std::thread addClientThread([]()
 		{
-			client.ConnectToServer("127.0.0.1", "8017");
+			authClient.ConnectToServer("127.0.0.1", "8017");
 		});
 
 	server.InitializeAndRunServer("127.0.0.1", "1708");
@@ -35,13 +37,24 @@ int main(int argc, char** argv)
 
 void OnClientCommandRecv(Authentication::CommandAndData commandData)
 {
-	/*if (commandData.command() == REGISTER_SUCESS)
+	if (commandData.command() == REGISTER_SUCESS)
 	{
 		Authentication::CreateAccountWebSuccess registerSucess;
 		registerSucess.ParseFromString(commandData.data());
 
-		std::cout << "Register Success : " << registerSucess.userid() << std::endl;
-	}*/
+		server.SendCommand(server.GetClientWithRequestID(registerSucess.requestid()), REGISTER_SUCESS, registerSucess);
+
+		std::cout << "Register Successful " << std::endl;
+	}
+	else if (commandData.command() == REGISTER_FAIL)
+	{
+		Authentication::CreateAccountWebFailure registerFail;
+		registerFail.ParseFromString(commandData.data());
+
+		server.SendCommand(server.GetClientWithRequestID(registerFail.requestid()), REGISTER_FAIL, registerFail);
+
+		std::cout << "Register Failed " << std::endl;
+	}
 }
 
 void OnClientConnectedToServer()
@@ -58,7 +71,35 @@ void OnClientConnectedToServer()
 
 void OnServerCommandRecv(Client* client, Authentication::CommandAndData commandData)
 {
+	if (commandData.command() == REGISTER)
+	{
+		Authentication::CreateAccountWeb registerAcc;
 
+		registerAcc.ParseFromString(commandData.data());
+		registerAcc.set_requestid(clientRequestId);
+
+		client->requestId = clientRequestId;
+
+		std::cout << "Email : " << registerAcc.email() << std::endl;
+		std::cout << "Password : " << registerAcc.plaintextpassword() << std::endl;
+
+		authClient.SendCommand(REGISTER, registerAcc);
+
+		clientRequestId++;
+	}
+	else if (commandData.command() == AUTHENTICATE)
+	{
+		Authentication::AuthenticateWeb authAcc;
+
+		authAcc.ParseFromString(commandData.data());
+
+		std::cout << "Email : " << authAcc.email() << std::endl;
+		std::cout << "Password : " << authAcc.plaintextpassword() << std::endl;
+
+		authClient.SendCommand(AUTHENTICATE, authAcc);
+
+		clientRequestId++;
+	}
 }
 
 void OnServerClientConnected(Client* client)

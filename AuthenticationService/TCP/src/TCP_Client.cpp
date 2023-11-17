@@ -83,8 +83,6 @@ void TCP_Client::ConnectToServer(const std::string& ipAddress, const std::string
 
 	serverConnected = true;
 
-	OnConnectedToServer();
-
 #pragma endregion
 
 #pragma region Threads
@@ -104,6 +102,8 @@ void TCP_Client::ConnectToServer(const std::string& ipAddress, const std::string
 	serverSendThread.detach();
 
 #pragma endregion
+
+	OnConnectedToServer();
 
 	while (true)
 	{
@@ -190,31 +190,6 @@ void TCP_Client::HandleSendCommand()
 				std::cout << "Client : Sending message to Server failed with error : " << WSAGetLastError() << std::endl;
 			}
 		}
-
-	/*	Authentication::CreateAccountWeb createAccountWeb;
-		createAccountWeb.set_requestid(0);
-		createAccountWeb.set_email("surya@gmail,com");
-		createAccountWeb.set_plaintextpassword("Password");
-
-		std::string buffer = SerializeWithCommandAndLengthPrefix(Command::AUTHENTICATE, createAccountWeb);*/
-
-	/*	std::string lengthString = buffer.substr(0, 5);
-		Authentication::LengthPrefix length;
-		length.ParseFromString(lengthString);
-
-		std::cout << length.messagelength() << std::endl;
-
-		std::string commandString = buffer.substr(5, length.messagelength());
-
-		Authentication::CommandAndData commandData;
-		commandData.ParseFromString(commandString);
-
-		Authentication::CreateAccountWeb newAccount;
-		newAccount.ParseFromString(commandData.data());
-
-
-		std::cout << newAccount.email() << std::endl;*/
-		
 	}
 }
 
@@ -223,4 +198,5 @@ void TCP_Client::SendCommand(const Command& command, const google::protobuf::Mes
 	std::string serializedString = SerializeWithCommandAndLengthPrefix(command, message);
 
 	listOfMessagesToSend.push(ClientToServerMessages{ serializedString });
+
 }

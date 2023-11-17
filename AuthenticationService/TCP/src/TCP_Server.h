@@ -71,6 +71,7 @@ public:
 	void SendCommand(Client* client, const Command& command, const google::protobuf::Message& message);
 
 	std::vector<Client*> GetAllClients();
+	Client* GetClientWithRequestID(int requestID);
 
 	std::function<void(Client*)> OnClientConnected = nullptr;
 	std::function<void(Client*, Authentication::CommandAndData)> OnCommandReceived = nullptr;
