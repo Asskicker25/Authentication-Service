@@ -23,6 +23,9 @@ int main(int argc, char** argv)
 
 void OnClientCommandRecv(Authentication::CommandAndData commandData)
 {
+
+#pragma region REGISTER
+
 	if (commandData.command() == REGISTER_SUCESS)
 	{
 		Authentication::CreateAccountWebSuccess registerSuccess;
@@ -40,10 +43,67 @@ void OnClientCommandRecv(Authentication::CommandAndData commandData)
 
 		registerFail.ParseFromString(commandData.data());
 
-		std::cout << "Register Failed : " << registerFail.reason() <<std::endl;
+		std::cout << "Register Failed : ";
+
+		switch (registerFail.reason())
+		{
+		case 1:
+			std::cout << "ACCOUNT ALREADY EXISTS";
+			break;
+		case 2: 
+			std::cout << "INVALID PASSWORD";
+			break;
+		case 3:
+			std::cout << "INTERNAL SERVER ERROR";
+			break;
+		}
+
+		std::cout<< std::endl;
 
 		waitingForResponse = false;
 	}
+
+#pragma endregion
+
+
+#pragma region AUTHENTICATE
+
+	else if (commandData.command() == AUTHENTICATE_SUCESS)
+	{
+		Authentication::AuthenticateWebSuccess authSucess;
+		authSucess.ParseFromString(commandData.data());
+
+		std::cout << "Authentication Success" << std::endl;
+
+		waitingForResponse = false;
+
+	}
+	else if (commandData.command() == AUTHENTICATE_FAIL)
+	{
+		Authentication::AuthenticateWebFailure authFail;
+		authFail.ParseFromString(commandData.data());
+
+		std::cout << "Authentication Failed : ";
+
+		switch (authFail.reason())
+		{
+		case 1:
+			std::cout << "INVALID CREDENTIALS";
+			break;
+		case 2:
+			std::cout << "INTERNAL SERVER ERROR";
+			break;
+		}
+
+		std::cout << std::endl;
+
+		waitingForResponse = false;
+
+	}
+
+#pragma endregion
+
+	
 }
 
 

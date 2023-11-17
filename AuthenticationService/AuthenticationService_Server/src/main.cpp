@@ -2,6 +2,8 @@
 #include "SQLHandler.h".
 #include "SQL_WebAuth.h"
 #include "SQL_User.h"
+#include "sha256.h"
+#include "SaltGenerator.h"
 
 void OnCommandRecv(Client* client, Authentication::CommandAndData commandData);
 void OnClientConnected(Client* client);
@@ -10,6 +12,8 @@ TCP_Server server;
 SQLHandler sqlHandler;
 SQL_WebAuth sqlWebAuth;
 SQL_User sqlUser;
+SHA256 hasher;
+SaltGenerator saltGen;
 
 int main(int argc, char** argv)
 {
@@ -22,19 +26,23 @@ int main(int argc, char** argv)
 
 	sqlHandler.ConnectToDatabase("127.0.0.1:3306", "root", "password", "gdp");
 
-	sqlHandler.AddPreparedStatement(StatementType::CREATEACCOUNT,
+	sqlHandler.AddPreparedStatement(StatementType::CREATE_ACCOUNT,
 		"INSERT INTO web_auth ( email , salt , hashed_password, userId) VALUES(?, ?, ?, ?) ");
 
-	sqlHandler.AddPreparedStatement(StatementType::UPDATEWEBAUTHID,
+	sqlHandler.AddPreparedStatement(StatementType::AUTHENTICATE_ACCOUNT,
+		"SELECT hashed_password, salt, userId FROM web_auth WHERE email = ?");
+
+	sqlHandler.AddPreparedStatement(StatementType::UPDATE_WEB_AUTH_ID,
 		"UPDATE web_auth SET userId = ? WHERE email = ?");
 
-	sqlHandler.AddPreparedStatement(StatementType::CREATEUSER,
+	sqlHandler.AddPreparedStatement(StatementType::CREATE_USER,
 		"INSERT INTO user (last_login, creation_date) VALUES (NOW(), NOW())");
 
-	/*sqlHandler.AddResultSetStatement(ResultSetStatement::GETLASTINSERT,
-		"SELECT LAST_INSERT_ID()");*/
+	sqlHandler.AddPreparedStatement(StatementType::GET_LAST_INSERT,
+		"SELECT LAST_INSERT_ID()");
 
-	//sqlWebAuth.AddAccount("sp@.com", "pwd");
+	sqlHandler.AddPreparedStatement(StatementType::UPDATE_LAST_LOGIN,
+		"UPDATE user SET last_login = NOW() WHERE id = ?");
 
 	server.OnClientConnected = OnClientConnected;
 	server.OnCommandReceived = OnCommandRecv;
@@ -58,7 +66,12 @@ void OnCommandRecv(Client* client, Authentication::CommandAndData commandData)
 		// 0 = Email exists
 		// -1 = Exception not handled
 
-		result = sqlWebAuth.AddAccount(registerAcc.email().c_str(), registerAcc.plaintextpassword().c_str());
+		std::string salt = saltGen.GenerateSalt();
+
+		std::string hashPassword = hasher(salt + registerAcc.plaintextpassword());
+
+
+		result = sqlWebAuth.AddAccount(registerAcc.email().c_str(), salt.c_str(), hashPassword.c_str());
 
 		if (result == 1)
 		{
@@ -100,12 +113,48 @@ void OnCommandRecv(Client* client, Authentication::CommandAndData commandData)
 #pragma endregion
 
 #pragma region AUTHENTICATE
+
+		// 1 = Success
+		// 0 = Email not exists
+		// -1 = Exception not handled
 	else if (commandData.command() == AUTHENTICATE)
 	{
 		Authentication::AuthenticateWeb authAccountWeb;
 		authAccountWeb.ParseFromString(commandData.data());
-		std::cout << "Authenticate : " << authAccountWeb.email() << std::endl;
+		
+		int userID;
 
+		result = sqlWebAuth.AuthenticateAccount(authAccountWeb.email().c_str(), authAccountWeb.plaintextpassword().c_str(), userID);
+
+		if (result == 1)
+		{
+			sqlUser.UpdateLastLogin(userID);
+
+			Authentication::AuthenticateWebSuccess authSuccess;
+
+			authSuccess.set_requestid(authAccountWeb.requestid());
+			authSuccess.set_userid(userID);
+
+			server.SendCommand(client, AUTHENTICATE_SUCESS, authSuccess);
+		}
+		else 
+		{
+			Authentication::AuthenticateWebFailure authFail;
+
+			authFail.set_requestid(authAccountWeb.requestid());
+
+
+			if (result == 2 || result == 0)
+			{
+				authFail.set_reason(Authentication::AuthenticateWebFailure::INVALID_CREDENTIALS);
+			}
+			else if (result == -1)
+			{
+				authFail.set_reason(Authentication::AuthenticateWebFailure::INTERNAL_SERVER_ERROR);
+			}
+
+			server.SendCommand(client, AUTHENTICATE_FAIL, authFail);
+		}
 	}
 #pragma endregion
 

@@ -137,12 +137,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\SaltGenerator.cpp" />
+    <ClCompile Include="src\sha256.cpp" />
     <ClCompile Include="src\SQL_User.cpp" />
     <ClCompile Include="src\SQL_WebAuth.cpp" />
     <ClCompile Include="src\SQLHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\SaltGenerator.h" />
+    <ClInclude Include="src\sha256.h" />
     <ClInclude Include="src\SQL_User.h" />
     <ClInclude Include="src\SQL_WebAuth.h" />
     <ClInclude Include="src\SQLHandler.h" />

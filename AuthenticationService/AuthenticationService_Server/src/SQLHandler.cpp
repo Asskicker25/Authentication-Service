@@ -82,20 +82,12 @@ void SQLHandler::AddPreparedStatement(const StatementType& key, const char* quer
 	listOfStatements[key] = connection->prepareStatement(query);
 }
 
-void SQLHandler::AddResultSetStatement(const ResultSetStatement& key, const char* query)
-{
-	listOfResultSetStatements[key] = connection->createStatement()->executeQuery(query);
-}
 
 sql::PreparedStatement* SQLHandler::GetStatement(const StatementType& key)
 {
 	return listOfStatements[key];
 }
 
-sql::ResultSet* SQLHandler::GetResultSetStatement(const ResultSetStatement& key)
-{
-	return listOfResultSetStatements[key];
-}
 
 sql::Connection* SQLHandler::GetConnection()
 {

@@ -16,17 +16,14 @@ void SQL_User::AssignSQLDatabase(SQLHandler* sqlHandler)
 
 int SQL_User::AddNewUser(int& userID)
 {
-	sql::PreparedStatement* stmt = sqlHandler->GetStatement(StatementType::CREATEUSER);
+	sql::PreparedStatement* stmt = sqlHandler->GetStatement(StatementType::CREATE_USER);
 
 	try
 	{
 		stmt->execute();
 
-		sql::Statement* statement = sqlHandler->GetConnection()->createStatement();
-		
-		sql::ResultSet* resultUser = statement->executeQuery("SELECT LAST_INSERT_ID()");
-
-		//sql::ResultSet* resultUser = sqlHandler->GetResultSetStatement(ResultSetStatement::GETLASTINSERT);
+		sql::ResultSet* resultUser = sqlHandler->
+			GetStatement(StatementType::GET_LAST_INSERT)->executeQuery();
 
 		while (resultUser->next())
 		{
@@ -44,6 +41,28 @@ int SQL_User::AddNewUser(int& userID)
 		return -1;
 	}
 
+}
 
+int SQL_User::UpdateLastLogin(const int& userID)
+{
+	sql::PreparedStatement* stmt = sqlHandler->GetStatement(StatementType::UPDATE_LAST_LOGIN);
+	stmt->setInt(1, userID);
+
+	try
+	{
+		stmt->execute();
+
+		std::cout << "Updated Last Login Successfully " << std::endl;
+
+		return 1;
+	}
+	catch (sql::SQLException& e)
+	{
+
+		std::cout << "SQL Error: " << e.what() << std::endl;
+		return -1;
+	}
+
+	return 0;
 }
 

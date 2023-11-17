@@ -37,6 +37,8 @@ int main(int argc, char** argv)
 
 void OnClientCommandRecv(Authentication::CommandAndData commandData)
 {
+#pragma region REGISTER
+
 	if (commandData.command() == REGISTER_SUCESS)
 	{
 		Authentication::CreateAccountWebSuccess registerSucess;
@@ -55,6 +57,31 @@ void OnClientCommandRecv(Authentication::CommandAndData commandData)
 
 		std::cout << "Register Failed " << std::endl;
 	}
+#pragma endregion
+
+#pragma region AUTHENTICATE
+
+	else if (commandData.command() == AUTHENTICATE_SUCESS)
+	{
+		Authentication::AuthenticateWebSuccess authSucess;
+		authSucess.ParseFromString(commandData.data());
+
+		server.SendCommand(server.GetClientWithRequestID(authSucess.requestid()), AUTHENTICATE_SUCESS, authSucess);
+
+		std::cout << "Authentication Successful " << std::endl;
+
+	}
+	else if (commandData.command() == AUTHENTICATE_FAIL)
+	{
+		Authentication::AuthenticateWebFailure authFail;
+		authFail.ParseFromString(commandData.data());
+
+		server.SendCommand(server.GetClientWithRequestID(authFail.requestid()), AUTHENTICATE_FAIL, authFail);
+	}
+
+#pragma endregion
+
+	
 }
 
 void OnClientConnectedToServer()
