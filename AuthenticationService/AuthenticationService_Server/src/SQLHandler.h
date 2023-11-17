@@ -5,6 +5,14 @@
 enum class StatementType
 {
 	CREATEACCOUNT = 0,
+	AUTHENTICATEACCOUNT = 1,
+	CREATEUSER = 2,
+	UPDATEWEBAUTHID = 3,
+};
+
+enum class ResultSetStatement
+{
+	GETLASTINSERT = 0,
 };
 
 class SQLHandler
@@ -24,7 +32,13 @@ public:
 	int Insert(const char* query);
 
 	void AddPreparedStatement(const StatementType& key, const char* query);
+	void AddResultSetStatement(const ResultSetStatement& key, const char* query);
+
 	sql::PreparedStatement* GetStatement(const StatementType& key);
+	sql::ResultSet* GetResultSetStatement(const ResultSetStatement& key);
+	std::map<StatementType, sql::PreparedStatement*> listOfStatements;
+
+	sql::Connection* GetConnection();
 
 private:
 
@@ -33,7 +47,7 @@ private:
 	sql::ResultSet* resultSet;
 	sql::Statement* statement;
 
-	std::map<StatementType, sql::PreparedStatement*> listOfStatements;
+	std::map<ResultSetStatement, sql::ResultSet*> listOfResultSetStatements;
 
 	bool isConnected;
 };

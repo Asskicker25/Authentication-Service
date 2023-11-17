@@ -10,6 +10,7 @@ public:
 
 	void AssignSQLDatabase(SQLHandler* sqlHandler);
 	int AddAccount(const char* email, const char* password);
+	int UpdateUserID(const char* email, const int& userID);
 
 private:
 	SQLHandler* sqlHandler;

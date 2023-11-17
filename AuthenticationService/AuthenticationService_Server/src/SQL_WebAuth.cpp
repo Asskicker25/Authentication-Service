@@ -48,3 +48,25 @@ int SQL_WebAuth::AddAccount(const char* email, const char* password)
 	}
 
 }
+
+int SQL_WebAuth::UpdateUserID(const char* email, const int& userID)
+{
+	sql::PreparedStatement* stmt = sqlHandler->GetStatement(StatementType::UPDATEWEBAUTHID);
+	stmt->setBigInt(1, std::to_string(userID));
+	stmt->setString(2, email);
+
+	try
+	{
+		stmt->execute();
+
+		std::cout << "User ID updated successfully!" << std::endl;
+
+		return 1;
+	}
+	catch (sql::SQLException& e)
+	{
+
+		std::cout << "SQL Error: " << e.what() << std::endl;
+		return -1;
+	}
+}
