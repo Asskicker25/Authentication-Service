@@ -11,7 +11,7 @@ void OnClientConnectedToServer();
 void OnServerCommandRecv(Client* client, Authentication::CommandAndData commandData);
 void OnServerClientConnected(Client* client);
 
-int clientRequestId = 0;
+int clientRequestId = 1;
 
 int main(int argc, char** argv)
 {
@@ -119,6 +119,9 @@ void OnServerCommandRecv(Client* client, Authentication::CommandAndData commandD
 		Authentication::AuthenticateWeb authAcc;
 
 		authAcc.ParseFromString(commandData.data());
+		authAcc.set_requestid(clientRequestId);
+
+		client->requestId = clientRequestId;
 
 		std::cout << "Email : " << authAcc.email() << std::endl;
 		std::cout << "Password : " << authAcc.plaintextpassword() << std::endl;

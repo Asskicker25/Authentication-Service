@@ -88,7 +88,7 @@ void OnCommandRecv(Client* client, Authentication::CommandAndData commandData)
 			Authentication::CreateAccountWebSuccess registerSucess;
 
 			registerSucess.set_requestid(registerAcc.requestid());
-			registerSucess.set_userid(0);
+			registerSucess.set_userid(userId);
 
 			server.SendCommand(client, REGISTER_SUCESS, registerSucess);
 		}

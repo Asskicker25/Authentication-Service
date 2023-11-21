@@ -24,7 +24,7 @@
 
 struct Client
 {
-	int requestId;
+	int requestId = -1;
 	SOCKET clientSocket;
 	bool terminateThread;
 };

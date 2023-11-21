@@ -136,6 +136,7 @@ void TCP_Server::AddNewClient()
 		{
 
 			Client* newClient = new Client();
+			newClient->requestId = -1;
 			newClient->clientSocket = newClientSocket;
 
 			OnClientConnected(newClient);
