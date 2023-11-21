@@ -11,12 +11,13 @@ BUILD INSTRUCTIONS:
 
 RUN INSTRUCTIONS:
 1. Open the AuthenticationService_Server.exe first. This is the server that connects to the SQL database.
-2. Open the AuthenticationClientServer.exe second. This is the server that accepts clients to connect to it. 
-3. This connects itself as a client to the AuthenticationService_Server.
-4. Open the Chat_Client.exe third. This is the client where you register and authenticate.
-5. In the client, you have a menu with options 1. Create Account and 2. Authenticate Account.
-6. Choose the option by entering the number. 
-7. Enter your email and password in the respective fields. 
+2. Enter your SQL database password to connect to database.
+3. Open the AuthenticationClientServer.exe second. This is the server that accepts clients to connect to it. 
+4. This connects itself as a client to the AuthenticationService_Server.
+5. Open the Chat_Client.exe third. This is the client where you register and authenticate.
+6. In the client, you have a menu with options 1. Create Account and 2. Authenticate Account.
+7. Choose the option by entering the number. 
+8. Enter your email and password in the respective fields. 
 
 
 VIDEO LINK : https://youtu.be/qMRi-GsRCtM
