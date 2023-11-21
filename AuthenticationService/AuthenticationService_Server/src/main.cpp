@@ -17,6 +17,7 @@ SaltGenerator saltGen;
 
 int main(int argc, char** argv)
 {
+	
 
 	std::cout << "Authetication Service Server" << std::endl << std::endl;
 	std::cout << "*********************************" << std::endl << std::endl;
@@ -24,7 +25,12 @@ int main(int argc, char** argv)
 	sqlWebAuth.AssignSQLDatabase(&sqlHandler);
 	sqlUser.AssignSQLDatabase(&sqlHandler);
 
-	sqlHandler.ConnectToDatabase("127.0.0.1:3306", "root", "password", "gdp");
+	std::string serverPassword;
+	std::cout << "Enter your SQL Database Password : ";
+	std::cin >> serverPassword;
+	std::cout << std::endl;
+
+	sqlHandler.ConnectToDatabase("127.0.0.1:3306", "root", serverPassword.c_str(), "gdp");
 
 	sqlHandler.AddPreparedStatement(StatementType::CREATE_ACCOUNT,
 		"INSERT INTO web_auth ( email , salt , hashed_password, userId) VALUES(?, ?, ?, ?) ");
